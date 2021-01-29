@@ -1,4 +1,8 @@
-# pybip
+# pybip3
+## NOTE: UNTESTED SOFTWARE!
+Since discovering my Android phone most likely doesn't support album art over AVRCP (even when setting the version to 1.6 in the developer options, weird), this is probably as far as the porting will go. I cannot find the service with the [Cover Art UUID](./bipheaders.py) in my phone. You might continue developing it, though.
+
+---
 Python implementation of Bluetooth's Basic Imaging Profile for sending images between devices and includes the ability to resize, and convert images to make them suitable for the receiving device
 
 Python3 porting and dependency upgrades by `Gonzalo Ruiz @rgon` January 2020. Tested on a Raspberry Pi 4 running: `Raspbian GNU/Linux 10 (buster) Linux 5.4.83-v7l+`.
@@ -6,10 +10,10 @@ Python3 porting and dependency upgrades by `Gonzalo Ruiz @rgon` January 2020. Te
 >This is a prototype implementation where some dummy data is used to make user experience easier. To make it to production grade, you need to tweak a little. Supports only linux platform as of now.
 
 #### Installation
-pybip requires Linux and python3 to run.
+pybip3 requires Linux and python3 to run.
 
 ```
-$ cd pybip
+$ cd pybip3
 $ ./requirements.sh # Install build dependencies (apt-get)
 $ sudo python3 setup.py build
 $ sudo python3 setup.py install
@@ -38,7 +42,7 @@ hci0:   Type: BR/EDR  Bus: USB
 
 Start the server on one of the bluetooth address.
 ```
-$ cd pybip
+$ cd pybip3
 $ python3 bipserver.py --address 00:1A:7D:DA:71:05
 Starting server for 00:1A:7D:DA:71:05 on port 1
 ....
@@ -46,7 +50,7 @@ Starting server for 00:1A:7D:DA:71:05 on port 1
 
 Start the client by specifying server's bluetooth address.
 ```
-$ cd pybip
+$ cd pybip3
 $ python3 bipclient.py
 Welcome to the Basic Imaging Profile!
 bip> connect 00:1A:7D:DA:71:05
