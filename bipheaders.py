@@ -37,6 +37,9 @@ header_dict.update({
 #                                           #
 #############################################
 class AppParamProperty(object):
+    tagid = None # virtual
+    fmt = None # virtual
+
     def __init__(self, data, encoded=False):
         self.data = data if encoded else self.encode(data)
 
