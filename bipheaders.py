@@ -3,7 +3,9 @@
 # -*- coding: utf-8 -*-.
 """Implementation of BIP related headers"""
 
-from PyOBEX.headers import *
+import struct
+from .PyOBEX.headers import *
+#header_dict, UnicodeHeader, DataHeader, App_Parameters
 
 
 # IMAGEPULL_UUID = "8EE9B3D0-4608-11D5-841A-0002A5325B4E"

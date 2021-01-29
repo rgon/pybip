@@ -9,16 +9,17 @@ import logging
 import os
 import readline
 import sys
-import tools
-
-import bluetooth
-import bipheaders as headers
-import cmd2
 
 from optparse import make_option
 from PIL import Image
-from PyOBEX import client, responses
-from xml_data_binding import image_descriptor, image_handles_descriptor, images_listing
+import bluetooth
+import cmd2
+
+from . import tools
+from . import bipheaders as headers
+
+from .PyOBEX import client, responses
+from .xml_data_binding import image_descriptor, image_handles_descriptor, images_listing
 
 logger = logging.getLogger(__name__)
 
@@ -76,12 +77,11 @@ class BIPClient(client.Client):
         header_list = [headers.Type("x-bt/img-thm"), headers.Img_Handle(image_handle)]
         return self.get(header_list=header_list)
 
-
 class REPL(cmd2.Cmd):
     """REPL to use BIP client"""
 
     def __init__(self):
-        cmd2.Cmd.__init__(self)
+        super().__init__(self)
         self.prompt = self.colorize("bip> ", "yellow")
         self.intro = self.colorize("Welcome to the Basic Imaging Profile!", "green")
         self.client = None
@@ -97,6 +97,13 @@ class REPL(cmd2.Cmd):
                 fobj.write("")
         readline.read_history_file(history_file)
         atexit.register(readline.write_history_file, history_file)
+
+    # The default behavior of cmd2 is to pass the user input directly to your do_* methods as a string.
+    # The object passed to your method is actually a Statement object, which has additional attributes that may be helpful, including arg_list and argv:
+    # for arg in statement.arg_list:
+    #     self.poutput(arg)
+    # @with_argument_list 
+    # https://cmd2.readthedocs.io/en/latest/features/argument_processing.html#argument-list
 
     @cmd2.options([], arg_desc="server_address")
     def do_connect(self, line, opts):

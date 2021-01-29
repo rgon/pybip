@@ -9,21 +9,21 @@ import logging
 import operator
 import os
 import sys
-import tools
 
-import bluetooth
-import bipheaders as headers
 import dateutil.parser
 
-from PyOBEX import server, responses, requests
-from xml_data_binding import image_descriptor, image_handles_descriptor, images_listing
+import bluetooth
+
+from . import tools
+from . import bipheaders as headers
+
+from .PyOBEX import server, responses, requests
+from .xml_data_binding import image_descriptor, image_handles_descriptor, images_listing
 
 
 logger = logging.getLogger(__name__)
 
-
 class BIPServer(server.Server):
-
     def __init__(self, device_address, rootdir=os.getcwd()):
         server.Server.__init__(self, device_address)
         self.rootdir = rootdir
@@ -281,12 +281,16 @@ def run_server(device_address, rootdir):
     # to be raised, the server instance will be deleted properly, giving us a
     # chance to create a new one and start the service again without getting
     # errors about the address still being in use.
+    socket = None
     try:
         bip_server = BIPServer(device_address, rootdir)
         socket = bip_server.start_service()
         bip_server.serve(socket)
-    except IOError:
-        bip_server.stop_service(socket)
+    except IOError as err:
+        if (socket):
+            bip_server.stop_service(socket)
+        else:
+            raise err
 
 
 def main():
@@ -300,6 +304,7 @@ def main():
     args = parser.parse_args()
 
     while True:
+        print(f"Starting server on address {args.address} and imagedir {args.imagedir}")
         run_server(args.address, args.imagedir)
 
     sys.exit(0)
