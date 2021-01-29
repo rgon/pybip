@@ -1,15 +1,18 @@
 # pybip
 Python implementation of Bluetooth's Basic Imaging Profile for sending images between devices and includes the ability to resize, and convert images to make them suitable for the receiving device
 
+Python3 porting and dependency upgrades by `Gonzalo Ruiz @rgon` January 2020. Tested on a Raspberry Pi 4 running: `Raspbian GNU/Linux 10 (buster) Linux 5.4.83-v7l+`.
+
 >This is a prototype implementation where some dummy data is used to make user experience easier. To make it to production grade, you need to tweak a little. Supports only linux platform as of now.
 
 #### Installation
-pybip requires Linux and python2 to run.
+pybip requires Linux and python3 to run.
 
 ```
 $ cd pybip
-$ sudo python setup.py build
-$ sudo python setup.py install
+$ ./requirements.sh # Install build dependencies (apt-get)
+$ sudo python3 setup.py build
+$ sudo python3 setup.py install
 ```
 
 #### Motivation
