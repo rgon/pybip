@@ -39,7 +39,7 @@ hci0:   Type: BR/EDR  Bus: USB
 Start the server on one of the bluetooth address.
 ```
 $ cd pybip
-$ python bipserver.py --address 00:1A:7D:DA:71:05
+$ python3 bipserver.py --address 00:1A:7D:DA:71:05
 Starting server for 00:1A:7D:DA:71:05 on port 1
 ....
 ```
@@ -47,7 +47,7 @@ Starting server for 00:1A:7D:DA:71:05 on port 1
 Start the client by specifying server's bluetooth address.
 ```
 $ cd pybip
-$ python bipclient.py
+$ python3 bipclient.py
 Welcome to the Basic Imaging Profile!
 bip> connect 00:1A:7D:DA:71:05
 2018-02-06 17:18:33,250 __main__ INFO     Finding BIP service ...

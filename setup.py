@@ -14,17 +14,17 @@ setup(
         "Development Status :: 5 - In progress/Alpha",
         "Intended Audience :: Developers",
         "Topic :: Software Development",
-        "Programming Language :: Python :: 2.7"
+        "Programming Language :: Python :: 3.8"
     ],
     keywords="BIP",
     packages=find_packages(),
     zip_safe=False,
-    dependency_links=["https://bitbucket.org/dboddie/pyobex/get/tip.zip#egg=pyobex-0.26"],
+    dependency_links=["https://github.com/nikhilkumarsingh/PyOBEX3"],
     install_requires=[
         "cmd2",
-        "pillow",
         "python-dateutil",
         "pybluez",
+        "pillow>=8.0",
         "pyobex>=0.26"],
     extra_require={
         "develop": [
