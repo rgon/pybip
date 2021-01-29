@@ -15,11 +15,11 @@ from PIL import Image
 import bluetooth
 import cmd2
 
-from . import tools
-from . import bipheaders as headers
+import tools
+import bipheaders as headers
 
-from .PyOBEX import client, responses
-from .xml_data_binding import image_descriptor, image_handles_descriptor, images_listing
+from PyOBEX import client, responses
+from xml_data_binding import image_descriptor, image_handles_descriptor, images_listing
 
 logger = logging.getLogger(__name__)
 
@@ -79,15 +79,22 @@ class BIPClient(client.Client):
 
 class REPL(cmd2.Cmd):
     """REPL to use BIP client"""
+    
+    @staticmethod
+    def colorize (string, color):
+        return cmd2.ansi.style(text=string, fg=color)
+        #return string
 
     def __init__(self):
-        super().__init__(self)
+        super().__init__()
+        #cmd2.Cmd.__init__(self)
         self.prompt = self.colorize("bip> ", "yellow")
         self.intro = self.colorize("Welcome to the Basic Imaging Profile!", "green")
+        
         self.client = None
         self._valid_image_handle = None
         self._store_history()
-        cmd2.set_use_arg_list(False)
+        #cmd2.set_use_arg_list(False) # If you want to be able to pass arguments with spaces to scripts, https://cmd2.readthedocs.io/_/downloads/en/0.7.8/pdf/
 
     @staticmethod
     def _store_history():
@@ -105,8 +112,8 @@ class REPL(cmd2.Cmd):
     # @with_argument_list 
     # https://cmd2.readthedocs.io/en/latest/features/argument_processing.html#argument-list
 
-    @cmd2.options([], arg_desc="server_address")
-    def do_connect(self, line, opts):
+    #@cmd2.options([], arg_desc="server_address")
+    def do_connect(self, line, opts = {}):
         """Connects to BIP Server"""
         server_address = line
         if not server_address:
@@ -130,8 +137,8 @@ class REPL(cmd2.Cmd):
         logger.info("Connect success")
         self.prompt = self.colorize("bip> ", "green")
 
-    @cmd2.options([], arg_desc="")
-    def do_disconnect(self, line, opts):
+    #@cmd2.options([], arg_desc="")
+    def do_disconnect(self, line, opts = {}):
         """Disconnects the BIP connection"""
         if self.client is None:
             logger.error("BIPClient is not even connected.. Connect and then try disconnect")
@@ -141,8 +148,8 @@ class REPL(cmd2.Cmd):
         self.client = None
         self.prompt = self.colorize("bip> ", "yellow")
 
-    @cmd2.options([], arg_desc="")
-    def do_capabilities(self, line, opts):
+    #@cmd2.options([], arg_desc="")
+    def do_capabilities(self, line, opts = {}):
         """Returns the capabilities supported by BIP Server"""
         logger.debug("Requesting BIP Service capabilities")
         result = self.client.get_capabilities()
@@ -152,14 +159,11 @@ class REPL(cmd2.Cmd):
         header, capabilities = result
         logger.debug("\n" + capabilities)
 
-    @cmd2.options([make_option('-c', '--max-count', type=int, default=0,
-                               help="Maximum number of image handles to be returned"),
-                   make_option('-o', '--start-offset', type=int, default=0,
-                               help="List start offset"),
-                   make_option('-x', '--latest-images-only', type=int, default=0,
-                               help="Include latest captured images only")
-                   ], arg_desc="")
-    def do_imageslist(self, args, opts):
+    
+    #@cmd2.options([make_option('-c', '--max-count', type=int, default=0, help="Maximum number of image handles to be returned"),
+    #               make_option('-o', '--start-offset', type=int, default=0, help="List start offset"),
+    #               make_option('-x', '--latest-images-only', type=int, default=0, help="Include latest captured images only")], arg_desc="")
+    def do_imageslist(self, args, opts = {}):
         """Returns list of available images"""
         logger.debug("Requesting for available imageslist")
         result = self.client.get_images_list(opts.max_count, opts.start_offset, opts.latest_images_only)
@@ -172,8 +176,8 @@ class REPL(cmd2.Cmd):
         if parsed_img_listing.image:
             self._valid_image_handle = parsed_img_listing.image[0].handle
 
-    @cmd2.options([], arg_desc="image_handle")
-    def do_imageproperties(self, line, opts):
+    #@cmd2.options([], arg_desc="image_handle")
+    def do_imageproperties(self, line, opts = {}):
         """Gets the properties of image for given image_handle"""
         logger.debug("Requesting for image properties of handle = %s", line)
         result = self.client.get_image_properties(line)
@@ -183,8 +187,8 @@ class REPL(cmd2.Cmd):
         header, image_prop = result
         logger.debug("\n" + image_prop)
 
-    @cmd2.options([], arg_desc="image_handle")
-    def do_getimage(self, line, opts):
+    #@cmd2.options([], arg_desc="image_handle")
+    def do_getimage(self, line, opts = {}):
         """Gets image for given image_handle"""
         logger.debug("Requesting for image of handle = %s", line)
         result = self.client.get_image(line)
@@ -197,8 +201,8 @@ class REPL(cmd2.Cmd):
         logger.debug("getimage response. image saved in received_image.jpg")
         im.show()
 
-    @cmd2.options([], arg_desc="image_handle")
-    def do_getthumbnail(self, line, opts):
+    #@cmd2.options([], arg_desc="image_handle")
+    def do_getthumbnail(self, line, opts = {}):
         """Gets Thumbnail version of image for given image_handle"""
         logger.debug("Requesting for thumbnail image of handle = %s", line)
         result = self.client.get_linked_thumbnail(line)
@@ -211,8 +215,8 @@ class REPL(cmd2.Cmd):
         logger.debug("getthumbnail response. image saved in received_thumbnail_image.jpg")
         im.show()
 
-    @cmd2.options([], arg_desc="server_address")
-    def do_test(self, line, opts):
+    #@cmd2.options([], arg_desc="server_address")
+    def do_test(self, line, opts = {}):
         """Triggers Basic tests for all functionality of BIPClient"""
         self.do_connect(line)
         self.do_capabilities("")
@@ -225,10 +229,9 @@ class REPL(cmd2.Cmd):
         self._valid_image_handle = None
         self.do_disconnect("")
 
-    do_q = cmd2.Cmd.do_quit
-
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)s %(levelname)-8s %(message)s')
+
     repl = REPL()
-    repl.cmdloop()
+    sys.exit(repl.cmdloop())

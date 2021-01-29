@@ -14,11 +14,11 @@ import dateutil.parser
 
 import bluetooth
 
-from . import tools
-from . import bipheaders as headers
+import tools
+import bipheaders as headers
 
-from .PyOBEX import server, responses, requests
-from .xml_data_binding import image_descriptor, image_handles_descriptor, images_listing
+from PyOBEX import server, responses, requests
+from xml_data_binding import image_descriptor, image_handles_descriptor, images_listing
 
 
 logger = logging.getLogger(__name__)
