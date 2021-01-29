@@ -1,7 +1,7 @@
 # pybip3
 ## NOTE: UNTESTED SOFTWARE!
 Since discovering my Android phone most likely doesn't support album art over AVRCP (even when setting the version to 1.6 in the developer options, weird), this is probably as far as the porting will go. I cannot find the service with the [Cover Art UUID](./bipheaders.py) in my phone. You might continue developing it, though.
-
+[It's in the source code, though.](https://android.googlesource.com/platform/packages/apps/Bluetooth/+/master/src/com/android/bluetooth/avrcp/AvrcpCoverArtService.java) Maybe it's a Xiaomi thing. Might have to investigate further. Also consider moving to [nOBEX](https://github.com/nccgroup/nOBEX)
 ---
 Python implementation of Bluetooth's Basic Imaging Profile for sending images between devices and includes the ability to resize, and convert images to make them suitable for the receiving device
 
